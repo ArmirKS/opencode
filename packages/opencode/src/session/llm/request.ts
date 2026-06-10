@@ -116,6 +116,7 @@ export const prepare = Effect.fn("LLMRequestPrep.prepare")(function* (input: Pre
     {
       sessionID: input.sessionID,
       agent: input.agent.name,
+      parentAgent: input.user.parentAgent,
       model: input.model,
       provider: input.provider,
       message: input.user,
@@ -136,6 +137,7 @@ export const prepare = Effect.fn("LLMRequestPrep.prepare")(function* (input: Pre
     {
       sessionID: input.sessionID,
       agent: input.agent.name,
+      parentAgent: input.user.parentAgent,
       model: input.model,
       provider: input.provider,
       message: input.user,

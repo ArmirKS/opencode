@@ -198,6 +198,7 @@ export const TaskTool = Tool.define(
           },
           variant: next.model ? undefined : variant,
           agent: next.name,
+          parentAgent: ctx.agent,
           parts,
         })
         return result.parts.findLast((item) => item.type === "text")?.text ?? ""
