@@ -457,6 +457,7 @@ export const layer = Layer.effect(
               time: { created: Date.now() },
               role: "user",
               agent: input.agent,
+              parentAgent: input.parentAgent,
               model: { providerID: model.providerID, modelID: model.modelID },
             }
             yield* sessions.updateMessage(userMsg)
@@ -667,6 +668,7 @@ export const layer = Layer.effect(
         time: { created: Date.now() },
         tools: input.tools,
         agent: ag.name,
+        parentAgent: input.parentAgent,
         model: {
           providerID: model.providerID,
           modelID: model.modelID,
@@ -1578,6 +1580,7 @@ export const PromptInput = Schema.Struct({
   messageID: Schema.optional(MessageID),
   model: Schema.optional(ModelRef),
   agent: Schema.optional(Schema.String),
+  parentAgent: Schema.optional(Schema.String),
   noReply: Schema.optional(Schema.Boolean),
   tools: Schema.optional(Schema.Record(Schema.String, Schema.Boolean)).annotate({
     description:
@@ -1605,6 +1608,7 @@ export const ShellInput = Schema.Struct({
   sessionID: SessionID,
   messageID: Schema.optional(MessageID),
   agent: Schema.String,
+  parentAgent: Schema.optional(Schema.String),
   model: Schema.optional(ModelRef),
   command: Schema.String,
 })

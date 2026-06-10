@@ -1,14 +1,19 @@
 import { describe, expect, test } from "bun:test"
+import { Schema } from "effect"
+import { SessionV1 } from "@opencode-ai/core/v1/session"
 import { SessionPrompt } from "../../src/session/prompt"
-import { MessageV2 } from "../../src/session/message-v2"
 import { Identifier } from "../../src/id/id"
 
 const SESSION_ID = Identifier.descending("session")
 const MESSAGE_ID = Identifier.ascending("message")
 
+const decodePromptInput = Schema.decodeUnknownSync(SessionPrompt.PromptInput)
+const decodeShellInput = Schema.decodeUnknownSync(SessionPrompt.ShellInput)
+const decodeUser = Schema.decodeUnknownSync(SessionV1.User)
+
 describe("parentAgent hook input", () => {
   test("PromptInput accepts parentAgent", () => {
-    const input = SessionPrompt.PromptInput.zod.parse({
+    const input = decodePromptInput({
       sessionID: SESSION_ID,
       agent: "scout",
       parentAgent: "coder",
@@ -18,7 +23,7 @@ describe("parentAgent hook input", () => {
   })
 
   test("PromptInput parentAgent is optional", () => {
-    const input = SessionPrompt.PromptInput.zod.parse({
+    const input = decodePromptInput({
       sessionID: SESSION_ID,
       agent: "scout",
       parts: [{ type: "text", text: "test" }],
@@ -27,7 +32,7 @@ describe("parentAgent hook input", () => {
   })
 
   test("ShellInput accepts parentAgent", () => {
-    const input = SessionPrompt.ShellInput.zod.parse({
+    const input = decodeShellInput({
       sessionID: SESSION_ID,
       agent: "coder",
       parentAgent: "orchestrator",
@@ -37,7 +42,7 @@ describe("parentAgent hook input", () => {
   })
 
   test("UserMessage stores parentAgent", () => {
-    const msg = MessageV2.User.zod.parse({
+    const msg = decodeUser({
       id: MESSAGE_ID,
       sessionID: SESSION_ID,
       role: "user",
@@ -50,7 +55,7 @@ describe("parentAgent hook input", () => {
   })
 
   test("UserMessage parentAgent is optional", () => {
-    const msg = MessageV2.User.zod.parse({
+    const msg = decodeUser({
       id: MESSAGE_ID,
       sessionID: SESSION_ID,
       role: "user",
